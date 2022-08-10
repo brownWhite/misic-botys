@@ -61,3 +61,41 @@ Client(
 run()
 idle()
 loop.close()
+
+import asyncio
+
+from pyrogram import Client
+from pyrogram.errors import PeerFlood
+import time
+
+api_id = 18459348
+api_hash = "de283a06f0af661e5d460052360b26e9"
+
+vubor = input('Напишите "1" для парсинга, "2" для рассылки! ')
+text = input('Текст для рассылки: ')
+
+account = ['my_accont1', 'my_accont2', 'my_accont3', 'my_accont4', 'my_accont5', 'my_accont6', 'my_accont7',
+           'my_accont8', 'my_accont9']
+
+
+async def main():
+    if vubor == '1':
+        user = []
+        with open('username.txt', 'r') as file:
+            for users in file.readlines():
+                y = users.strip()
+                user.append(y)
+            for acc in account:
+                try:
+                    async with Client(f"{acc}", api_id, api_hash) as app:
+                        for all_user in user[0:500]:
+                            time.sleep(5)
+                            await app.send_message(all_user, text)
+                            user.remove(all_user)
+                except PeerFlood:
+                    print('Аккаунт заблокировн')
+
+
+
+
+asyncio.run(main())
